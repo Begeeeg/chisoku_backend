@@ -26,7 +26,7 @@ export const signupController = async (
         });
     } catch (error: any) {
         res.status(error.statusCode || 500).json({ error: error.message });
-        console.log("Erro signUp controller:", error);
+        console.log("Error signUp controller:", error);
     }
 };
 
@@ -52,7 +52,7 @@ export const loginController = async (
         });
     } catch (error: any) {
         res.status(error.statusCode || 500).json({ error: error.message });
-        console.log("Erro signIn controller:", error);
+        console.log("Error signIn controller:", error);
     }
 };
 
@@ -72,6 +72,6 @@ export const logoutController = async (
         });
     } catch (error: any) {
         res.status(error.statusCode || 500).json({ error: error.message });
-        console.log("Erro signOut controller:", error);
+        console.log("Error signOut controller:", error);
     }
 };
