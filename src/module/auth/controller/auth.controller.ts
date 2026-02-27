@@ -61,6 +61,15 @@ export const logoutController = async (
     res: Response
 ): Promise<void> => {
     try {
+        const hasToken = Boolean(req.cookies?.jwt);
+
+        res.clearCookie("jwt");
+
+        res.status(200).json({
+            message: hasToken
+                ? "User signed out successfully"
+                : "No user signed in",
+        });
     } catch (error: any) {
         res.status(error.statusCode || 500).json({ error: error.message });
         console.log("Erro signOut controller:", error);
