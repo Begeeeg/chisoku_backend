@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import { IUser } from "../interface/IUser.Interface";
+import { addAgeVirtual } from "./virtualSchema/ageVirtual";
 
 const userSchema = new Schema<IUser>(
     {
@@ -62,6 +63,8 @@ const userSchema = new Schema<IUser>(
     },
     { timestamps: true }
 );
+
+addAgeVirtual(userSchema);
 
 const User = mongoose.model<IUser>("User", userSchema);
 
