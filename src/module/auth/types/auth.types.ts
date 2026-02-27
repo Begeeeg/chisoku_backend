@@ -1,4 +1,4 @@
-export interface SignUpBody {
+export interface SignupBody {
     givenname: string;
     surname: string;
     birthdate: Date;
@@ -13,7 +13,7 @@ export interface SignUpBody {
     role: "user" | "admin";
 }
 
-export interface SignInBody {
+export interface LoginBody {
     identifier: string;
     password: string;
 }

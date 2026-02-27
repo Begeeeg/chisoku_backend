@@ -1,10 +1,11 @@
 import { AppError } from "../../../common/utils/appError";
 import User from "../../user/model/User.model";
-import { SignUpBody } from "../types/auth.types";
+
 import bcrypt from "bcryptjs";
 import { getAge } from "../../../common/utils/getAge";
+import { LoginBody, SignupBody } from "../types/auth.types";
 
-export const signUpService = async (data: SignUpBody) => {
+export const signupService = async (data: SignupBody) => {
     const {
         givenname,
         surname,
@@ -124,4 +125,27 @@ export const signUpService = async (data: SignUpBody) => {
     });
 
     return savedUser;
+};
+
+export const loginService = async (data: LoginBody) => {
+    const { identifier, password } = data;
+
+    const user = await User.findOne({
+        $or: [{ username: identifier.trim() }, { email: identifier.trim() }],
+    });
+
+    if (!identifier || !password) {
+        throw new AppError("All field is required", 400);
+    }
+
+    if (!user) {
+        throw new AppError("Invalid credentials", 400);
+    }
+
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+        throw new AppError("Invalid credentials", 400);
+    }
+
+    return user;
 };
