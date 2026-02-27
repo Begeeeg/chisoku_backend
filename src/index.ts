@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 
 import connectDB from "./common/config/database.config";
 import { authRoutes } from "./module/auth";
+import { expenseRoutes } from "./module/expense";
 
 dotenv.config({ quiet: true });
 
@@ -21,3 +22,4 @@ connectDB().then(() => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/expense", expenseRoutes);
