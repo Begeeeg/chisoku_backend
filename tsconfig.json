@@ -12,11 +12,11 @@
         "strict": true,
         "skipLibCheck": true,
 
-        "types": ["node"],
+        "types": ["jest", "node"],
         "resolveJsonModule": true,
 
         "sourceMap": true
     },
-    "include": ["src", "src/types"],
+    "include": ["src", "src/types", "tests"],
     "exclude": ["node_modules", "dist"]
 }
