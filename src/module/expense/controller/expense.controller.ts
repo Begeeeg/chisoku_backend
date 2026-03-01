@@ -4,9 +4,11 @@ import {
     createlistService,
     deletelistService,
     getlistService,
+    getTotalByCategoryService,
+    getTotalByRecurrenceService,
+    getTotalExpensesService,
     updatelistService,
 } from "../service/expense.service";
-import { listen } from "node:quic";
 
 export const createlistController = async (
     req: Request<{}, {}, ExpenselistBody>,
@@ -102,5 +104,58 @@ export const deletelistController = async (
     } catch (error: any) {
         res.status(error.statusCode || 500).json({ error: error.message });
         console.log("Error deleteList controller:", error);
+    }
+};
+
+export const getTotalExpensesController = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
+    try {
+        const total = await getTotalExpensesService(req.user!._id);
+        res.json({ total });
+    } catch (error: any) {
+        console.error("Error totalExpenses controller:", error);
+        res.status(500).json({
+            error: error.message || "Something went wrong",
+        });
+    }
+};
+
+export const getTotalByCategoryController = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
+    try {
+        const status = req.params.status as "fixed" | "variable" | "optional";
+
+        const total = await getTotalByCategoryService(req.user!._id, status);
+
+        res.json({ total });
+    } catch (error: any) {
+        console.log("Error totalExpense controller:", error);
+        res.status(error.statusCode || 500).json({
+            error: error.message || "Something went wrong. Please try again",
+        });
+    }
+};
+
+export const getTotalByRecurrenceController = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
+    try {
+        const status = req.params.status as
+            | "once"
+            | "weekly"
+            | "fortnight"
+            | "monthly";
+
+        const total = await getTotalByRecurrenceService(req.user!._id, status);
+
+        res.json({ total });
+    } catch (error) {
+        console.error("Error totalOnce controller:", error);
+        res.status(500).json({ message: "Internal Error" });
     }
 };

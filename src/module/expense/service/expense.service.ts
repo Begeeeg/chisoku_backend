@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { AppError } from "../../../common/utils/appError";
 import { dateValidator } from "../../../common/utils/dateValidator";
 import Expense from "../model/Expense.model";
@@ -119,4 +120,72 @@ export const deletelistService = async (userId: string, listId: string) => {
     }
 
     return deletedExpense;
+};
+
+export const getTotalExpensesService = async (userId: string) => {
+    const result = await Expense.aggregate([
+        {
+            $match: {
+                user: new mongoose.Types.ObjectId(userId),
+            },
+        },
+        {
+            $group: {
+                _id: null,
+                total: { $sum: "$amount" },
+            },
+        },
+    ]);
+
+    return result[0]?.total || 0;
+};
+
+export const getTotalByCategoryService = async (
+    userId: string,
+    category?: "fixed" | "variable" | "optional"
+) => {
+    const matchStage: any = {
+        user: new mongoose.Types.ObjectId(userId),
+    };
+
+    if (category) {
+        matchStage.category = category;
+    }
+
+    const result = await Expense.aggregate([
+        { $match: matchStage },
+        {
+            $group: {
+                _id: null,
+                total: { $sum: "$amount" },
+            },
+        },
+    ]);
+
+    return result[0]?.total || 0;
+};
+
+export const getTotalByRecurrenceService = async (
+    userId: string,
+    recurrence?: "once" | "weekly" | "fortnight" | "monthly"
+) => {
+    const matchStage: any = {
+        user: new mongoose.Types.ObjectId(userId),
+    };
+
+    if (recurrence) {
+        matchStage.recurrence = recurrence;
+    }
+
+    const result = await Expense.aggregate([
+        { $match: matchStage },
+        {
+            $group: {
+                _id: null,
+                total: { $sum: "$amount" },
+            },
+        },
+    ]);
+
+    return result[0]?.total || 0;
 };
