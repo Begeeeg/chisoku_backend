@@ -108,3 +108,15 @@ export const updatelistService = async (
 
     return updatedExpense;
 };
+
+export const deletelistService = async (userId: string, listId: string) => {
+    const deletedExpense = await Expense.findOneAndDelete({
+        _id: listId,
+        user: userId,
+    });
+    if (!deletedExpense) {
+        throw new AppError("List not found", 400);
+    }
+
+    return deletedExpense;
+};

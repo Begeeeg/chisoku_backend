@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { ExpenselistBody } from "../types/expense.types";
 import {
     createlistService,
+    deletelistService,
     getlistService,
     updatelistService,
 } from "../service/expense.service";
@@ -85,10 +86,19 @@ export const updatelistController = async (
 };
 
 export const deletelistController = async (
-    req: Request,
+    req: Request<{ id: string }>,
     res: Response
 ): Promise<void> => {
     try {
+        const { id } = req.params;
+        const service = await deletelistService(req.user!._id, id);
+
+        res.status(200).json({
+            message: "Expense list deleted successfully",
+            data: {
+                title: service.title,
+            },
+        });
     } catch (error: any) {
         res.status(error.statusCode || 500).json({ error: error.message });
         console.log("Error deleteList controller:", error);
