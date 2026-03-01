@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import { ExpenselistBody } from "../types/expense.types";
-import { createlistService, getlistService } from "../service/expense.service";
+import {
+    createlistService,
+    getlistService,
+    updatelistService,
+} from "../service/expense.service";
+import { listen } from "node:quic";
 
 export const createlistController = async (
     req: Request<{}, {}, ExpenselistBody>,
@@ -40,6 +45,7 @@ export const getlistController = async (
         res.status(200).json({
             message: "Expense list retrieved successfully",
             data: service.map((exp) => ({
+                listId: exp._id,
                 title: exp.title,
                 category: exp.category,
                 recurrence: exp.recurrence,
@@ -54,10 +60,24 @@ export const getlistController = async (
 };
 
 export const updatelistController = async (
-    req: Request,
+    req: Request<{ id: string }, {}, ExpenselistBody>,
     res: Response
 ): Promise<void> => {
     try {
+        const { id } = req.params;
+        const service = await updatelistService(req.user!._id, id, req.body);
+
+        res.status(200).json({
+            message: "Expense list updated successfully",
+            data: {
+                listId: service._id,
+                title: service.title,
+                category: service.category,
+                recurrence: service.recurrence,
+                amount: service.amount,
+                deadline: service.deadline,
+            },
+        });
     } catch (error: any) {
         res.status(error.statusCode || 500).json({ error: error.message });
         console.log("Error updateList controller:", error);
