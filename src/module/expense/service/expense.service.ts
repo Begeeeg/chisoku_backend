@@ -42,3 +42,11 @@ export const createlistService = async (
 
     return newExpense;
 };
+
+export const getlistService = async (userId: string) => {
+    const expenseList = await Expense.find({ user: userId }).sort({
+        createdAt: -1,
+    });
+
+    return expenseList;
+};

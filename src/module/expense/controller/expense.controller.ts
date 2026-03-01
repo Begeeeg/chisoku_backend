@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ExpenselistBody } from "../types/expense.types";
-import { createlistService } from "../service/expense.service";
+import { createlistService, getlistService } from "../service/expense.service";
 
 export const createlistController = async (
     req: Request<{}, {}, ExpenselistBody>,
@@ -35,6 +35,18 @@ export const getlistController = async (
     res: Response
 ): Promise<void> => {
     try {
+        const service = await getlistService(req.user!._id);
+
+        res.status(200).json({
+            message: "Expense list retrieved successfully",
+            data: service.map((exp) => ({
+                title: exp.title,
+                category: exp.category,
+                recurrence: exp.recurrence,
+                amount: exp.amount,
+                deadline: exp.deadline,
+            })),
+        });
     } catch (error: any) {
         res.status(error.statusCode || 500).json({ error: error.message });
         console.log("Error getList controller:", error);
