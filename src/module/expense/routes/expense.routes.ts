@@ -3,6 +3,7 @@ import { protectRoutes } from "../../../common/middleware/protectRoutes.middlewa
 import {
     createlistController,
     deletelistController,
+    getByIdController,
     getlistController,
     getTotalByCategoryController,
     getTotalByRecurrenceController,
@@ -16,6 +17,7 @@ router.post("/create", protectRoutes, createlistController);
 router.get("/", protectRoutes, getlistController);
 router.patch("/update/:id", protectRoutes, updatelistController);
 router.delete("/delete/:id", protectRoutes, deletelistController);
+router.get("/get/:id", protectRoutes, getByIdController);
 router.get("/total", protectRoutes, getTotalExpensesController);
 router.get(
     "/total/category/:status",

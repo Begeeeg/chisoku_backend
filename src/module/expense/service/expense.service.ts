@@ -140,6 +140,19 @@ export const getTotalExpensesService = async (userId: string) => {
     return result[0]?.total || 0;
 };
 
+export const getByIdService = async (userId: string, listId: string) => {
+    const expense = await Expense.findOne({
+        _id: listId,
+        user: userId,
+    });
+
+    if (!expense) {
+        throw new AppError("List not found", 400);
+    }
+
+    return expense;
+};
+
 export const getTotalByCategoryService = async (
     userId: string,
     category?: "fixed" | "variable" | "optional"
