@@ -140,6 +140,10 @@ export const getByIdController = async (
             data: {
                 listId: service._id,
                 title: service.title,
+                category: service.category,
+                recurrence: service.recurrence,
+                amount: service.amount,
+                deadline: service.deadline,
             },
         });
 
