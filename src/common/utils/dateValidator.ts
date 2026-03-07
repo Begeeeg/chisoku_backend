@@ -6,7 +6,8 @@ export const dateValidator = (dateInput: string | Date): Date => {
     if (dateInput instanceof Date) {
         parsedDate = dateInput;
     } else if (typeof dateInput === "string") {
-        const parts = dateInput.split("-");
+        const cleanDate = dateInput.split("T")[0];
+        const parts = cleanDate.split("-");
 
         if (parts.length !== 3) {
             throw new AppError("Invalid date format. Use YYYY-MM-DD", 400);
